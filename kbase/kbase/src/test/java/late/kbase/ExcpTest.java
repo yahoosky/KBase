@@ -23,6 +23,7 @@ public class ExcpTest {
 	@Test
 	public void testExcp() {
 		try {
+			
 			KBaseErrorManager.throwMessage(KBaseErrCodeConstants.USER_DEFINED_MSG,"aa", "bbcc","dd");
 		} catch (KBaseException e) {
 			e.printStackTrace();

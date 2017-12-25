@@ -4,7 +4,7 @@
 package late.kbase.dto;
 
 import late.comm.dto.BaseTradeResponseDTO;
-import late.kbase.entity.UserProfile;
+import late.kbase.entity.UserProfileEntity;
 
 /**
  * 
@@ -19,12 +19,12 @@ public class UserLoginResponseDTO extends BaseTradeResponseDTO {
 	/**
 	 * 用户实体
 	 */
-	private UserProfile user;
+	private UserProfileEntity user;
 
 	/**
 	 * @return the user
 	 */
-	public UserProfile getUser() {
+	public UserProfileEntity getUser() {
 		return user;
 	}
 
@@ -32,7 +32,7 @@ public class UserLoginResponseDTO extends BaseTradeResponseDTO {
 	 * @param user
 	 *            the user to set
 	 */
-	public void setUser(UserProfile user) {
+	public void setUser(UserProfileEntity user) {
 		this.user = user;
 	}
 

@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
-
 import late.kbase.dto.UserLoginRequestDTO;
 import late.kbase.dto.UserLoginResponseDTO;
+import late.kbase.entity.UserProfileEntity;
+import late.kbase.excp.KBaseException;
 import late.kbase.service.IUserService;
 
 /**
@@ -39,14 +39,15 @@ public class KBaseController extends BaseController {
 	@RequestMapping(value = "show", method = RequestMethod.POST)
 	@ResponseBody
 	public UserLoginResponseDTO showUser(@RequestBody UserLoginRequestDTO request) {
-		JSONObject json = (JSONObject) JSONObject.toJSON(request);
-		System.out.println(json.toString());
 
 		UserLoginResponseDTO resonse = new UserLoginResponseDTO();
-		userService.getUserByUsername(request.getUser().getUserName());
+		try {
+			UserProfileEntity user = userService.getUserByUsername(request.getUser().getUserName());
+			resonse.setUser(user);
+		} catch (KBaseException e) {
+			resonse.setRetInfo(e.getErrCode(), e.getErrMsg());
+		}
 
-		json = (JSONObject) JSONObject.toJSON(request);
-		System.out.println(json.toString());
 		return resonse;
 	}
 }

@@ -14,11 +14,11 @@ import late.comm.excp.BaseErrCodeConstants;
  * @createTime :2017-3-2 下午05:52:04
  * @version: v1.0
  */
-public interface KBaseErrCodeConstants extends BaseErrCodeConstants{
+public interface KBaseErrCodeConstants extends BaseErrCodeConstants {
 
 	/**
-	 * 用户自定义的错误信息
+	 * 数据库错误-未找到符合条件的记录
 	 */
-	public static final String USER_DEFINED_MSG = "USERDEF01";
-	
+	public static final String DB_NO_DATA_FOUND = "DBER0001";
+
 }

@@ -4,7 +4,15 @@
 package late.kbase.excp;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import late.comm.log.TraceLogger;
+import late.kbase.dao.IKbaseErrDefMapper;
 
 /**
  * @description 文件异常信息缓存类
@@ -22,6 +30,9 @@ public class KBaseErrorCache {
 	private final static Map<String, ErrorMessage> ERROR_MESSAGES = new HashMap<String, ErrorMessage>();
 	private static Boolean loaded = Boolean.FALSE;
 
+	@Resource
+	IKbaseErrDefMapper mapper = null;
+
 	/**
 	 * @description 初始化方法
 	 * @methodName init
@@ -29,7 +40,19 @@ public class KBaseErrorCache {
 	 * @createTime 2017-3-2 下午04:55:37
 	 * @version v1.0
 	 */
-	private static void init() {
+	private void init() {
+		List<Map<String, String>> errDefList = mapper.getAll();
+
+		for (Map<String, String> errDef : errDefList) {
+			String errCode = errDef.get("err_code");
+			String errMsg = errDef.get("err_msg");
+
+			TraceLogger.debug("加载异常代码", errCode, errMsg);
+			ERROR_MESSAGES.put(errCode, new ErrorMessage(errCode, errMsg));
+		}
+
+		TraceLogger.debug("异常代码加载完成");
+
 		/**
 		 * 生成文件部分异常
 		 */
@@ -49,6 +72,10 @@ public class KBaseErrorCache {
 	 * @return
 	 */
 	public static String getErrMsg(String errCode, String... params) {
+		synchronized (KBaseErrorCache.class) {
+			TraceLogger.debug("加载异常代码");
+			new KBaseErrorCache().init();
+		}
 		String msg = "未找到错误信息";
 		if (loaded) {
 			if (ERROR_MESSAGES.get(errCode) != null) {
@@ -101,7 +128,4 @@ public class KBaseErrorCache {
 		}
 	}
 
-	static {
-		init();
-	}
 }

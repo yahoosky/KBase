@@ -18,7 +18,7 @@
 			targetProject="kbase/src/test/java" />
 		<javaClientGenerator targetPackage="late.kbase.dao"
 			targetProject="kbase/src/test/java" type="XMLMAPPER" />
-		<table schema="mysql" tableName="kbase_menu_mast"
+		<table schema="mysql" tableName="kbase_err_def"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
 			selectByExampleQueryId="false">

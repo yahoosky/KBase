@@ -3,7 +3,8 @@
  */
 package late.kbase.service;
 
-import late.kbase.entity.UserProfile;
+import late.kbase.entity.UserProfileEntity;
+import late.kbase.excp.KBaseException;
 
 /**
  * 用户服务接口
@@ -23,6 +24,7 @@ public interface IUserService {
 	 * @author chijingjia
 	 * @createTime 2017年12月1日 下午2:46:08
 	 * @version v1.0
+	 * @throws KBaseException 
 	 */
-	UserProfile getUserByUsername(String userId);
+	UserProfileEntity getUserByUsername(String userId) throws KBaseException ;
 }

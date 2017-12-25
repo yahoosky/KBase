@@ -6,7 +6,7 @@ package late.kbase.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import late.comm.dto.BaseTradeRequestDTO;
-import late.kbase.entity.UserProfile;
+import late.kbase.entity.UserProfileEntity;
 
 /**
  * 
@@ -23,12 +23,12 @@ public class UserLoginRequestDTO extends BaseTradeRequestDTO {
 	/**
 	 * 用户实体
 	 */
-	private UserProfile user;
+	private UserProfileEntity user;
 
 	/**
 	 * @return the user
 	 */
-	public UserProfile getUser() {
+	public UserProfileEntity getUser() {
 		return user;
 	}
 
@@ -36,7 +36,7 @@ public class UserLoginRequestDTO extends BaseTradeRequestDTO {
 	 * @param user
 	 *            the user to set
 	 */
-	public void setUser(UserProfile user) {
+	public void setUser(UserProfileEntity user) {
 		this.user = user;
 	}
 

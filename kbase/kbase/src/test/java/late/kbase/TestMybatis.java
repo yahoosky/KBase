@@ -41,7 +41,7 @@ public class TestMybatis {
 	@Test
 	public void Test() {
 		try {
-			userService.login("aa");
+			userService.getUserByUsername("aa");
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

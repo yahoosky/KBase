@@ -67,12 +67,10 @@
 		user.password = document.getElementById("password").value;
 
 		data.user = user;//业务数据
-		ajaxPost("comm/show", data, function() {
-			alert('SUC');
+		ajaxPost("comm/show", data, function(data) {
+			alert('SUC'+data);
 		}, function() {
 			alert('FATAL');
-		}, function() {
-			alert('LOAD');
 		});
 	}
 </script>

@@ -10,7 +10,7 @@ package late.kbase.entity;
  * @createTime :2017年12月4日 下午1:47:11
  * @version: v1.0
  */
-public class UserProfile {
+public class UserProfileEntity {
 	/**
 	 * 用户编号
 	 */

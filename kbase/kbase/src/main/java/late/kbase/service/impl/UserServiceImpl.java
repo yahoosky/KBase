@@ -7,9 +7,11 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import jdk.nashorn.internal.runtime.UserAccessorProperty;
 import late.kbase.dao.IUserProfileMapper;
-import late.kbase.entity.UserProfile;
+import late.kbase.entity.UserProfileEntity;
+import late.kbase.excp.KBaseErrCodeConstants;
+import late.kbase.excp.KBaseErrorManager;
+import late.kbase.excp.KBaseException;
 import late.kbase.service.IUserService;
 
 /**
@@ -28,12 +30,14 @@ public class UserServiceImpl implements IUserService {
 	@Resource
 	IUserProfileMapper mapper = null;
 
-	public UserProfile getUserByUsername(String userName) {
-		UserProfile prop = new UserProfile();
+	public UserProfileEntity getUserByUsername(String userName) throws KBaseException {
+		UserProfileEntity prop = new UserProfileEntity();
 		prop.setUserName(userName);
-		;
 
-		UserProfile user = mapper.selectByPrimaryKey(1L);
+		UserProfileEntity user = mapper.getByUsername(prop);
+		if (user == null) {
+			KBaseErrorManager.throwMessage(KBaseErrCodeConstants.DB_NO_DATA_FOUND, "用户不存在", "用户名", userName);
+		}
 
 		return user;
 	}
