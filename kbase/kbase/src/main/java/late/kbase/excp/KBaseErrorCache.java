@@ -7,12 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import late.comm.log.TraceLogger;
 import late.kbase.dao.IKbaseErrDefMapper;
+import late.kbase.entity.KbaseErrDefEntity;
 
 /**
  * @description 文件异常信息缓存类
@@ -30,8 +31,8 @@ public class KBaseErrorCache {
 	private final static Map<String, ErrorMessage> ERROR_MESSAGES = new HashMap<String, ErrorMessage>();
 	private static Boolean loaded = Boolean.FALSE;
 
-	@Resource
 	IKbaseErrDefMapper mapper = null;
+	private SqlSessionFactory sqlSessionFactory;
 
 	/**
 	 * @description 初始化方法
@@ -41,11 +42,17 @@ public class KBaseErrorCache {
 	 * @version v1.0
 	 */
 	private void init() {
-		List<Map<String, String>> errDefList = mapper.getAll();
 
-		for (Map<String, String> errDef : errDefList) {
-			String errCode = errDef.get("err_code");
-			String errMsg = errDef.get("err_msg");
+		mapper = new ClassPathXmlApplicationContext("spring-mybatis.xml").getBean(IKbaseErrDefMapper.class);
+
+		System.out.println(mapper);
+		List<KbaseErrDefEntity> errDefList = mapper.getAll();
+
+		for (KbaseErrDefEntity errDef : errDefList) {
+//			String errCode = errDef.get("err_code");
+//			String errMsg = errDef.get("err_msg");
+			String errCode = errDef.getErrCode();
+			String errMsg = errDef.getErrMsg();
 
 			TraceLogger.debug("加载异常代码", errCode, errMsg);
 			ERROR_MESSAGES.put(errCode, new ErrorMessage(errCode, errMsg));
