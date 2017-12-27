@@ -22,6 +22,10 @@ public class MainMenuQueryRequestDTO extends BaseQueryRequestDTO {
 	 * 菜单主体
 	 */
 	private KbaseMenuMastEntity menuMast;
+	/**
+	 * 显示层级 0-全部
+	 */
+	private int lvl;
 
 	/**
 	 * @return the menuMast
@@ -36,6 +40,21 @@ public class MainMenuQueryRequestDTO extends BaseQueryRequestDTO {
 	 */
 	public void setMenuMast(KbaseMenuMastEntity menuMast) {
 		this.menuMast = menuMast;
+	}
+
+	/**
+	 * @return the lvl
+	 */
+	public int getLvl() {
+		return lvl;
+	}
+
+	/**
+	 * @param lvl
+	 *            the lvl to set
+	 */
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
 	}
 
 }

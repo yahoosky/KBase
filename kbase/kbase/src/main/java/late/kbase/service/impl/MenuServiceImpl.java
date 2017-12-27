@@ -3,14 +3,14 @@
  */
 package late.kbase.service.impl;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
 import late.kbase.dao.IKbaseMenuMastMapper;
-import late.kbase.dto.MainMenuAddResponseDTO;
-import late.kbase.dto.MainMenuQueryRequestDTO;
-import late.kbase.dto.MainMenuQueryResponseDTO;
+import late.kbase.entity.KbaseMenuMastEntity;
 import late.kbase.service.IMenuService;
 
 /**
@@ -29,39 +29,17 @@ public class MenuServiceImpl implements IMenuService {
 	@Resource
 	IKbaseMenuMastMapper menuMapper = null;
 
-	/**
-	 * 添加菜单
-	 * 
-	 * @methodName addMenu
-	 * @author chijingjia
-	 * @createTime 2017年12月14日 上午10:58:36
-	 * @version v1.0
-	 * @param request
-	 * @return
-	 */
-	public MainMenuAddResponseDTO addMenu(MainMenuAddResponseDTO request) {
-		MainMenuAddResponseDTO response = new MainMenuAddResponseDTO();
-
-		int retCode = menuMapper.insert(request.getMenuMast());
-		System.out.println(retCode);
-
-		return response;
+	@Override
+	public void addMenu(KbaseMenuMastEntity menuEntity) {
+		menuMapper.insert(menuEntity);
 	}
 
-	/**
-	 * 查询菜单
-	 * 
-	 * @methodName queryMenu
-	 * @author chijingjia
-	 * @createTime 2017年12月14日 上午11:02:32
-	 * @version v1.0
-	 * @param request
-	 * @return
-	 */
-	public MainMenuQueryResponseDTO queryMenu(MainMenuQueryRequestDTO request) {
-		MainMenuQueryResponseDTO response = new MainMenuQueryResponseDTO();
-
-		return response;
+	@Override
+	public List<KbaseMenuMastEntity> queryMenuByParentId(String parentId, int lvl) {
+		if(parentId==null||parentId.isEmpty()){
+			parentId = "0";
+		}
+		return menuMapper.queryMenuByParentId(parentId, lvl);
 	}
 
 }

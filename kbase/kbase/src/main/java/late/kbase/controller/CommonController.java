@@ -3,19 +3,25 @@
  */
 package late.kbase.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import late.kbase.dto.MainMenuQueryRequestDTO;
+import late.kbase.dto.MainMenuQueryResponseDTO;
 import late.kbase.dto.UserLoginRequestDTO;
 import late.kbase.dto.UserLoginResponseDTO;
+import late.kbase.entity.KbaseMenuMastEntity;
 import late.kbase.entity.UserProfileEntity;
 import late.kbase.excp.KBaseException;
+import late.kbase.service.IMenuService;
 import late.kbase.service.IUserService;
 
 /**
@@ -30,15 +36,26 @@ import late.kbase.service.IUserService;
 @Controller
 @RequestMapping("comm")
 public class CommonController {
-	static Logger logger = Logger.getLogger(CommonController.class);
+	private static final String THIS_COMPONMENT_NAME = CommonController.class.getName();
 
 	@Resource
 	IUserService userService = null;
+	@Resource
+	IMenuService menuService = null;
 
-	@RequestMapping(value = "show", method = RequestMethod.POST)
+	/**
+	 * 获取用户信息
+	 * 
+	 * @methodName getUser
+	 * @author chijingjia
+	 * @createTime 2017年12月27日 下午6:56:14
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "getUser", method = RequestMethod.POST)
 	@ResponseBody
-	public UserLoginResponseDTO showUser(@RequestBody UserLoginRequestDTO request) {
-
+	public UserLoginResponseDTO getUser(@RequestBody UserLoginRequestDTO request) {
 		UserLoginResponseDTO resonse = new UserLoginResponseDTO();
 		UserProfileEntity user = null;
 		try {
@@ -50,4 +67,28 @@ public class CommonController {
 		resonse.setUser(user);
 		return resonse;
 	}
+
+	/**
+	 * 查询主菜单列表
+	 * 
+	 * @methodName qryMainMenu
+	 * @author chijingjia
+	 * @createTime 2017年12月27日 下午6:58:10
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "getMenu", method = RequestMethod.POST)
+	@ResponseBody
+	public MainMenuQueryResponseDTO qryMainMenu(@RequestBody MainMenuQueryRequestDTO request) {
+		MainMenuQueryResponseDTO response = new MainMenuQueryResponseDTO();
+
+		List<KbaseMenuMastEntity> menuList = menuService.queryMenuByParentId(request.getMenuMast().getParentId(),
+				request.getLvl());
+
+		response.setMenuMasts(menuList);
+
+		return response;
+	}
+
 }

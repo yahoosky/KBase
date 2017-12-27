@@ -62,12 +62,12 @@
 		context.user = contextUser;//用户信息添加至上下文
 		data.context = context;//上下文添加至传输对象
 
-		var user = new Object();
-		user.userName = document.getElementById("username").value;
-		user.password = document.getElementById("password").value;
+		var menuMast = new Object();
+		menuMast.parentId = document.getElementById("parentId").value;
 
-		data.user = user;//业务数据
-		ajaxPost("comm/getUser", data, function(data) {
+		data.menuMast = menuMast;//业务数据
+		data.lvl = document.getElementById("lvl").value;
+		ajaxPost("comm/getMenu", data, function(data) {
 			alert('SUC'+data);
 		}, function() {
 			alert('FATAL');
@@ -77,8 +77,8 @@
 </head>
 <body>
 	<form action="comm/show?action=login" method="post">
-		Name:<input id="username" type="text" name="username" /> Password:<input
-			id="password" type="password" name="password" /> <input
+		ParentId:<input id="parentId" type="text" name="parentId" />
+		Lvl:<input id="lvl" type="text" name="lvl" /> <input
 			type="button" value="登录" onclick="sub()" />
 	</form>
 </body>
