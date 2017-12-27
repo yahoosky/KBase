@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import late.kbase.dao.IUserProfileMapper;
 import late.kbase.entity.UserProfileEntity;
-import late.kbase.excp.KBaseErrCodeConstants;
+import late.kbase.excp.CommonErrCodeConstants;
 import late.kbase.excp.KBaseErrorManager;
 import late.kbase.excp.KBaseException;
 import late.kbase.service.IUserService;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements IUserService {
 
 		UserProfileEntity user = mapper.getByUsername(prop);
 		if (user == null) {
-			KBaseErrorManager.throwMessage(KBaseErrCodeConstants.DB_NO_DATA_FOUND, "用户不存在", "用户名", userName);
+			KBaseErrorManager.throwMessage(CommonErrCodeConstants.USER_NOT_FOUND, "用户不存在", "用户名", userName);
 		}
 
 		return user;

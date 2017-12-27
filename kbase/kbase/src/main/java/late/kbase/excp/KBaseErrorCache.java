@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import late.comm.log.TraceLogger;
@@ -25,6 +23,7 @@ import late.kbase.entity.KbaseErrDefEntity;
  * @version: v1.0
  */
 public class KBaseErrorCache {
+	private static final String THIS_COMPONMENT_NAME = KBaseErrorCache.class.getName();
 	/**
 	 * @description 缓存的异常信息
 	 */
@@ -32,7 +31,6 @@ public class KBaseErrorCache {
 	private static Boolean loaded = Boolean.FALSE;
 
 	IKbaseErrDefMapper mapper = null;
-	private SqlSessionFactory sqlSessionFactory;
 
 	/**
 	 * @description 初始化方法
@@ -49,8 +47,8 @@ public class KBaseErrorCache {
 		List<KbaseErrDefEntity> errDefList = mapper.getAll();
 
 		for (KbaseErrDefEntity errDef : errDefList) {
-//			String errCode = errDef.get("err_code");
-//			String errMsg = errDef.get("err_msg");
+			// String errCode = errDef.get("err_code");
+			// String errMsg = errDef.get("err_msg");
 			String errCode = errDef.getErrCode();
 			String errMsg = errDef.getErrMsg();
 
@@ -58,7 +56,7 @@ public class KBaseErrorCache {
 			ERROR_MESSAGES.put(errCode, new ErrorMessage(errCode, errMsg));
 		}
 
-		TraceLogger.debug("异常代码加载完成");
+		TraceLogger.debug(THIS_COMPONMENT_NAME, "异常代码加载完成");
 
 		/**
 		 * 生成文件部分异常
@@ -79,10 +77,6 @@ public class KBaseErrorCache {
 	 * @return
 	 */
 	public static String getErrMsg(String errCode, String... params) {
-		synchronized (KBaseErrorCache.class) {
-			TraceLogger.debug("加载异常代码");
-			new KBaseErrorCache().init();
-		}
 		String msg = "未找到错误信息";
 		if (loaded) {
 			if (ERROR_MESSAGES.get(errCode) != null) {
@@ -135,4 +129,12 @@ public class KBaseErrorCache {
 		}
 	}
 
+	static {
+
+		synchronized (KBaseErrorCache.class) {
+			TraceLogger.debug(THIS_COMPONMENT_NAME, "加载异常代码");
+			if (!KBaseErrorCache.loaded)
+				new KBaseErrorCache().init();
+		}
+	}
 }

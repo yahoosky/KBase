@@ -25,6 +25,6 @@ public interface IUserService {
 	 * @createTime 2017年12月1日 下午2:46:08
 	 * @version v1.0
 	 * @throws KBaseException 
-	 */
+	 */ 
 	UserProfileEntity getUserByUsername(String userId) throws KBaseException ;
 }

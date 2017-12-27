@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
+import late.com.utils.ArrayUtils;
 import late.comm.BaseThreadAttribute;
 import late.comm.log.TraceLogger;
 
@@ -21,6 +22,7 @@ import late.comm.log.TraceLogger;
  * @version: v1.0
  */
 public class KBaseErrorManager {
+	private static final String THIS_COMPONMENT_NAME = KBaseErrorManager.class.getName();
 	/**
 	 * @description 内部日志类
 	 */
@@ -38,8 +40,10 @@ public class KBaseErrorManager {
 	 */
 	public static void throwMessage(String errCode, String info, String... params) throws KBaseException {
 		String errMsg = KBaseErrorCache.getErrMsg(errCode, params);
-		TraceLogger.error(info, null, params);
-		TraceLogger.error(errMsg, null);
+		StackTraceElement element = Thread.currentThread().getStackTrace()[1];
+		ArrayUtils.headAdd(params, element.getClassName(), element.getMethodName(), "line:", element.getLineNumber());
+		TraceLogger.error(THIS_COMPONMENT_NAME, info, null, params);
+		TraceLogger.error(THIS_COMPONMENT_NAME, errMsg, null);
 		throw new KBaseException(errCode, errMsg);
 	}
 
@@ -54,7 +58,7 @@ public class KBaseErrorManager {
 	 * @param params
 	 */
 	public static void logException(Throwable e, String... params) {
-		TraceLogger.error("交易出现异常", e, params);
+		TraceLogger.error(THIS_COMPONMENT_NAME, "交易出现异常", e, params);
 	}
 
 	/**
