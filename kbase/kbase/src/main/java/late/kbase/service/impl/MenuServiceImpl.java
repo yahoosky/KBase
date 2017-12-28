@@ -9,8 +9,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import late.comm.utils.StringUtils;
+import late.kbase.contant.MenuContants;
 import late.kbase.dao.IKbaseMenuMastMapper;
 import late.kbase.entity.KbaseMenuMastEntity;
+import late.kbase.excp.KBaseErrorManager;
+import late.kbase.excp.KBaseException;
 import late.kbase.service.IMenuService;
 
 /**
@@ -30,13 +34,28 @@ public class MenuServiceImpl implements IMenuService {
 	IKbaseMenuMastMapper menuMapper = null;
 
 	@Override
-	public void addMenu(KbaseMenuMastEntity menuEntity) {
+	public void addMenu(KbaseMenuMastEntity menuEntity) throws KBaseException {
+		menuEntity.setParentId(
+				StringUtils.getValWithDefault(menuEntity.getParentId(), MenuContants.MAIN_MENU_ROOT_PARENT_ID));
+		if (!MenuContants.MAIN_MENU_ROOT_PARENT_ID.equals(menuEntity.getParentId())) {
+			KbaseMenuMastEntity parentMenu = getMenu(menuEntity.getParentId());
+			if (parentMenu == null) {
+				KBaseErrorManager.throwMessage(MenuContants.ERR_PARENT_MENU_NOTEXISTS, "≤Àµ•ÃÌº” ß∞‹", "∏∏≤Àµ•",
+						menuEntity.getParentId());
+			}
+		}
 		menuMapper.insert(menuEntity);
 	}
 
 	@Override
+	public KbaseMenuMastEntity getMenu(String menuId) {
+		KbaseMenuMastEntity mastEntity = menuMapper.getByPk(menuId);
+		return mastEntity;
+	}
+
+	@Override
 	public List<KbaseMenuMastEntity> queryMenuByParentId(String parentId, int lvl) {
-		if(parentId==null||parentId.isEmpty()){
+		if (parentId == null || parentId.isEmpty()) {
 			parentId = "0";
 		}
 		return menuMapper.queryMenuByParentId(parentId, lvl);

@@ -8,9 +8,10 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
-import late.com.utils.ArrayUtils;
 import late.comm.BaseThreadAttribute;
 import late.comm.log.TraceLogger;
+import late.comm.utils.ArrayUtils;
+import late.kbase.contant.KBaseErrCodeConstants;
 
 /**
  * @description 异常处理类。一般用于抛出异常信息。

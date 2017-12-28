@@ -6,6 +6,7 @@ package late.kbase.service;
 import java.util.List;
 
 import late.kbase.entity.KbaseMenuMastEntity;
+import late.kbase.excp.KBaseException;
 
 /**
  * 菜单服务接口
@@ -27,8 +28,21 @@ public interface IMenuService {
 	 * @createTime 2017年12月27日 下午7:27:40
 	 * @version v1.0
 	 * @param menuEntity
+	 * @throws KBaseException
 	 */
-	void addMenu(KbaseMenuMastEntity menuEntity);
+	void addMenu(KbaseMenuMastEntity menuEntity) throws KBaseException;
+
+	/**
+	 * 根据ID获取指定菜单
+	 * 
+	 * @methodName getMenu
+	 * @author chijingjia
+	 * @createTime 2017年12月28日 上午9:37:14
+	 * @version v1.0
+	 * @param menuId
+	 * @return
+	 */
+	KbaseMenuMastEntity getMenu(String menuId);
 
 	/**
 	 * 根据父ID查找菜单列表（包括子菜单）

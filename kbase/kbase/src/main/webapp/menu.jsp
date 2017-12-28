@@ -35,7 +35,7 @@
 		ajax.setRequestHeader("Content-Type", "application/json");
 		ajax.onreadystatechange = function() {
 			console.log('ajax status change ' + ajax.readyState + " "
-				+ ajax.readyState == 4)
+					+ ajax.readyState == 4)
 			if (ajax.readyState == 4) {
 				console.log('ajax status ' + ajax.status)
 				if (ajax.status == 200) {
@@ -68,7 +68,33 @@
 		data.menuMast = menuMast;//业务数据
 		data.lvl = document.getElementById("lvl").value;
 		ajaxPost("comm/getMenu", data, function(data) {
-			alert('SUC'+data);
+			alert('SUC' + data);
+		}, function() {
+			alert('FATAL');
+		});
+	}
+
+	function addMenu() {
+		var data = new Object();//传输对象
+		var context = new Object();//交易上下文
+		var contextUser = new Object();//上下文中用户信息
+		contextUser.userId = '1';//当前用户编号
+		contextUser.userName = 'aa';//当前用户名
+		contextUser.lvl = '9';//当前柜员级别-登陆时获取
+		context.user = contextUser;//用户信息添加至上下文
+		data.context = context;//上下文添加至传输对象
+
+		var menuMast = new Object();
+		menuMast.menuId = document.getElementById("add_menuId").value;
+		menuMast.menuDesc = document.getElementById("add_menuDesc").value;
+		menuMast.parentId = document.getElementById("add_parentId").value;
+		menuMast.menuType = document.getElementById("add_menuType").value;
+		menuMast.menuOwner = document.getElementById("add_menuOwner").value;
+		menuMast.status = document.getElementById("add_status").value;
+		data.menuMast = menuMast;//业务数据
+
+		ajaxPost("comm/addMenu", data, function(data) {
+			alert('SUC' + data);
 		}, function() {
 			alert('FATAL');
 		});
@@ -76,10 +102,21 @@
 </script>
 </head>
 <body>
-	<form action="comm/show?action=login" method="post">
-		ParentId:<input id="parentId" type="text" name="parentId" />
-		Lvl:<input id="lvl" type="text" name="lvl" /> <input
-			type="button" value="登录" onclick="sub()" />
+	<form method="post">
+		ParentId:<input id="parentId" type="text" name="parentId" /> Lvl:<input
+			id="lvl" type="text" name="lvl" /> <input type="button" value="查询"
+			onclick="sub()" />
+	</form>
+	<hr></hr>
+
+	<form method="post">
+		MenuId:<input id="add_menuId" type="text" name="menuId" /><br />
+		MenuDesc:<input id="add_menuDesc" type="text" name="menuDesc" /><br />
+		ParentId:<input id="add_parentId" type="text" name="parentId" /><br />
+		MenuType:<input id="add_menuType" type="text" name="menuType" /><br />
+		MenuOwner:<input id="add_menuOwner" type="text" name="menuOwner" /><br />
+		status:<input id="add_status" type="text" name="status" /><br /> <input
+			type="button" value="添加" onclick="addMenu()" />
 	</form>
 </body>
 </html>

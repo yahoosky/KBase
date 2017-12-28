@@ -4,7 +4,7 @@ import java.util.List;
 
 import late.kbase.entity.KbaseMenuMastEntity;
 
-public interface IKbaseMenuMastMapper extends BaseMapper {
+public interface IKbaseMenuMastMapper extends BaseMapper<KbaseMenuMastEntity, String> {
 
 	/**
 	 * 根据父ID查找菜单列表

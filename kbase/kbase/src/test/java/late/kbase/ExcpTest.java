@@ -5,7 +5,7 @@ package late.kbase;
 
 import org.junit.Test;
 
-import late.kbase.excp.KBaseErrCodeConstants;
+import late.kbase.contant.KBaseErrCodeConstants;
 import late.kbase.excp.KBaseErrorManager;
 import late.kbase.excp.KBaseException;
 

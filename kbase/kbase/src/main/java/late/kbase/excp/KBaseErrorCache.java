@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import late.comm.log.TraceLogger;
+import late.kbase.contant.KBaseErrCodeConstants;
 import late.kbase.dao.IKbaseErrDefMapper;
 import late.kbase.entity.KbaseErrDefEntity;
 

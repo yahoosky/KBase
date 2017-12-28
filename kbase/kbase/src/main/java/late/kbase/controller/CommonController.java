@@ -4,7 +4,6 @@
 package late.kbase.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Resource;
 
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import late.kbase.dto.MainMenuAddRequestDTO;
+import late.kbase.dto.MainMenuAddResponseDTO;
 import late.kbase.dto.MainMenuQueryRequestDTO;
 import late.kbase.dto.MainMenuQueryResponseDTO;
 import late.kbase.dto.UserLoginRequestDTO;
@@ -87,6 +88,33 @@ public class CommonController {
 				request.getLvl());
 
 		response.setMenuMasts(menuList);
+
+		return response;
+	}
+
+	/**
+	 * 添加主菜单信息
+	 * 
+	 * @methodName addMainMenu
+	 * @author chijingjia
+	 * @createTime 2017年12月28日 上午9:23:52
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "addMenu", method = RequestMethod.POST)
+	@ResponseBody
+	public MainMenuAddResponseDTO addMainMenu(@RequestBody MainMenuAddRequestDTO request) {
+		MainMenuAddResponseDTO response = new MainMenuAddResponseDTO();
+
+		KbaseMenuMastEntity mastEntity = request.getMenuMast();
+
+		try {
+			menuService.addMenu(mastEntity);
+		} catch (KBaseException e) {
+			e.printStackTrace();
+			response.setRetInfo(e.getErrCode(), e.getErrMsg());
+		}
 
 		return response;
 	}

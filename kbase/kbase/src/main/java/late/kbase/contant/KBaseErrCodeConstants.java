@@ -1,7 +1,7 @@
 /**
  * @description
  */
-package late.kbase.excp;
+package late.kbase.contant;
 
 import late.comm.excp.BaseErrCodeConstants;
 
