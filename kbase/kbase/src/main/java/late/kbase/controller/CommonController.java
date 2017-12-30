@@ -106,14 +106,13 @@ public class CommonController {
 	@ResponseBody
 	public MainMenuAddResponseDTO addMainMenu(@RequestBody MainMenuAddRequestDTO request) {
 		MainMenuAddResponseDTO response = new MainMenuAddResponseDTO();
-
 		KbaseMenuMastEntity mastEntity = request.getMenuMast();
 
 		try {
 			menuService.addMenu(mastEntity);
 		} catch (KBaseException e) {
 			e.printStackTrace();
-			response.setRetInfo(e.getErrCode(), e.getErrMsg());
+			response.setExcp(e);
 		}
 
 		return response;

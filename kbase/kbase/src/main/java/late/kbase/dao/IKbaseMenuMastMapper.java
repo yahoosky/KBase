@@ -20,5 +20,4 @@ public interface IKbaseMenuMastMapper extends BaseMapper<KbaseMenuMastEntity, St
 	 * @return
 	 */
 	List<KbaseMenuMastEntity> queryMenuByParentId(String parentId, int lvl);
-
 }

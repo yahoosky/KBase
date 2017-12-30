@@ -32,4 +32,11 @@
 		where
 		FIND_IN_SET(menu_id,concat(getMenuTree(#{0},#{1})));
 	</select>
+
+	<select id="getByPk" parameterType="string" resultMap="BaseResultMap">
+		select *
+		from kbase_menu_mast
+		where menu_id = #{menuId};
+	</select>
+
 </mapper>
