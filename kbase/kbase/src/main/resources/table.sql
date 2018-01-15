@@ -14,9 +14,16 @@ create table kbase_err_def(
   err_lvl	char(1) comment '错误级别 E-异常  D-一般信息'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '错误信息表';
 
+create table kbase_user_ticket(
+  ticket	char(32) NOT NULL PRIMARY KEY comment 'session标志',
+  user_id	BIGINT comment '错误信息',
+  last_log_time	TIMESTAMP (6)  comment '最后登记时间' --时间戳会自动登记，不需要默认值。精度过低时，只是显示问题。调大后，再次查询，丢失的精度仍会出现
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '用户-session对照表';
+
 
 insert into kbase_err_def (err_code,err_msg,err_lvl) values ('DBER0001','未找到符合条件的记录','E');
 insert into kbase_err_def (err_code,err_msg,err_lvl) values ('COMM0001','未找到指定用户','E');
+insert into kbase_err_def (err_code,err_msg,err_lvl) values ('COMM0002','用户总线为空','E');
 
 
 select * from kbase_menu_mast start with parent_id = '1' connect by prior parent_id = menu_id;

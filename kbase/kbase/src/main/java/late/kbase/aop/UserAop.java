@@ -3,8 +3,6 @@
  */
 package late.kbase.aop;
 
-import java.util.UUID;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -20,7 +18,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import late.comm.dto.BaseResponseDTO;
 import late.comm.dto.BaseTradeRequestDTO;
+import late.kbase.contant.KBaseErrCodeConstants;
+import late.kbase.dao.IKbaseUserTicketMapper;
 import late.kbase.dao.IUserProfileMapper;
+import late.kbase.entity.KbaseUserTicketEntity;
+import late.kbase.entity.UserProfileEntity;
+import late.kbase.excp.KBaseErrorManager;
 
 /**
  * 
@@ -40,7 +43,10 @@ import late.kbase.dao.IUserProfileMapper;
 @Aspect
 @Repository
 public class UserAop {
+	static final String TICKET_MARK = "ticket";
 
+	@Resource
+	IKbaseUserTicketMapper ticketMapper = null;
 	@Resource
 	IUserProfileMapper userMapper = null;
 
@@ -71,20 +77,39 @@ public class UserAop {
 	@Around("late.kbase.aop.UserAop.commonController()")
 	public BaseResponseDTO getUserById(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object[] objs = joinPoint.getArgs();
+
 		BaseTradeRequestDTO baseRequestDTO = (BaseTradeRequestDTO) objs[0];
 
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
 
 		HttpSession session = request.getSession();
-		Object ticket = session.getAttribute("ticket");
-
+		String ticket = (String) session.getAttribute(TICKET_MARK);
+		KbaseUserTicketEntity ticketEntity = null;
 		if (ticket == null) {
-			ticket = UUID.randomUUID().toString();
-			session.setAttribute("ticket", ticket);
+			Long userId = baseRequestDTO.getContext().getUser().getUserId();
+			if (userId == null) {
+				KBaseErrorManager.throwMessage(KBaseErrCodeConstants.USER_CONTEXT_ISNULL, "用户总线未输入");
+			}
+			ticket = session.getId();
+			session.setAttribute(TICKET_MARK, ticket);
 			baseRequestDTO.getContext().getUser().setTicket(ticket);
+			// 登记ticket
+			ticketEntity = new KbaseUserTicketEntity();
+			ticketEntity.setTicket(ticket);
+			ticketEntity.setUserId(baseRequestDTO.getContext().getUser().getUserId());
+			ticketMapper.insert(ticketEntity);
 		} else {
-			baseRequestDTO.getContext().getUser().setUserName("bb");
+			KbaseUserTicketEntity userTicket = ticketMapper.getByPk(ticket);
+			if (userTicket == null) {
+				KBaseErrorManager.throwMessage(KBaseErrCodeConstants.USER_LOGIN_TIMEOUT, "用户登录超时", "SESSION ID",
+						ticket);
+			}
+			UserProfileEntity userEntity = userMapper.getByPk(userTicket.getUserId());
+			baseRequestDTO.getContext().getUser().setUserId(userEntity.getUserId());
+			baseRequestDTO.getContext().getUser().setUserName(userEntity.getUserName());
+			baseRequestDTO.getContext().getUser().setLvl(userEntity.getLvl());
+			baseRequestDTO.getContext().getUser().setTicket(ticket);
 		}
 
 		return (BaseResponseDTO) joinPoint.proceed(objs);
