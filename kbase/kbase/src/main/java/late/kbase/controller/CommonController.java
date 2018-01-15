@@ -45,6 +45,22 @@ public class CommonController {
 	IMenuService menuService = null;
 
 	/**
+	 * 用户登录，为了切面区分获取用户，将方法独立
+	 * 
+	 * @methodName login
+	 * @author chijingjia
+	 * @createTime 2018年1月15日 上午10:58:12
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@ResponseBody
+	public UserLoginResponseDTO login(@RequestBody UserLoginRequestDTO request) {
+		return getUser(request);
+	}
+
+	/**
 	 * 获取用户信息
 	 * 
 	 * @methodName getUser

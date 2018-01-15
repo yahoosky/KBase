@@ -3,16 +3,22 @@
  */
 package late.kbase.aop;
 
-import javax.annotation.Resource;
+import java.util.UUID;
 
-import org.aspectj.lang.JoinPoint;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import late.comm.UserProfile;
+import late.comm.dto.BaseResponseDTO;
 import late.comm.dto.BaseTradeRequestDTO;
 import late.kbase.dao.IUserProfileMapper;
 
@@ -46,21 +52,43 @@ public class UserAop {
 	 * @createTime 2018年1月15日 上午10:23:38
 	 * @version v1.0
 	 */
-	@Pointcut("execution(* late.kbase.controller.CommonController.*(late.comm.dto.BaseTradeRequestDTO))")
-	public void commonController() {
+	@Pointcut("execution(* late.kbase.controller.CommonController.*(..))")
+	private void commonController() {
 	}
 
-	@Before("late.kbase.aop.UserAop.commonController()")
-	public void getUserById(JoinPoint joinPoint) {
+	/**
+	 * 用户登录切点
+	 * 
+	 * @methodName userLogion
+	 * @author chijingjia
+	 * @createTime 2018年1月15日 上午10:57:03
+	 * @version v1.0
+	 */
+	@Pointcut("execution(late.kbase.dto.UserLoginResponseDTO late.kbase.controller.CommonController.login(late.kbase.dto.UserLoginRequestDTO))")
+	private void userLogion() {
+	}
+
+	@Around("late.kbase.aop.UserAop.commonController()")
+	public BaseResponseDTO getUserById(ProceedingJoinPoint joinPoint) throws Throwable {
 		Object[] objs = joinPoint.getArgs();
 		BaseTradeRequestDTO baseRequestDTO = (BaseTradeRequestDTO) objs[0];
-		UserProfile user = baseRequestDTO.getContext().getUser();
-		if (user != null) {
-			System.out.println(user.getUserName());
-			user.setUserName("aabbcc");
+
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+				.getRequest();
+
+		HttpSession session = request.getSession();
+		Object ticket = session.getAttribute("ticket");
+
+		if (ticket == null) {
+			ticket = UUID.randomUUID().toString();
+			session.setAttribute("ticket", ticket);
+			baseRequestDTO.getContext().getUser().setTicket(ticket);
 		} else {
-			System.out.println("无用户");
+			baseRequestDTO.getContext().getUser().setUserName("bb");
 		}
+
+		return (BaseResponseDTO) joinPoint.proceed(objs);
+
 	}
 
 }
