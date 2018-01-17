@@ -13,15 +13,22 @@
 		<jdbcConnection connectionURL="jdbc:mysql://192.168.40.135:3306/mysql"
 			driverClass="com.mysql.jdbc.Driver" password="123" userId="root" />
 		<javaModelGenerator targetPackage="late.kbase.entity"
-			targetProject="kbase/src/test/java" />
+			targetProject="kbase/src/test/java">
+			<property name="rootClass" value="BaseEntity" />
+		</javaModelGenerator>
 		<sqlMapGenerator targetPackage="mapping"
 			targetProject="kbase/src/test/java" />
 		<javaClientGenerator targetPackage="late.kbase.dao"
-			targetProject="kbase/src/test/java" type="XMLMAPPER" />
-		<table schema="mysql" tableName="kbase_err_def"
+			targetProject="kbase/src/test/java" type="XMLMAPPER">
+			<!-- 可以为所有生成的接口添加一个父接口，但是MBG只负责生成，不负责检查 -->
+			<property name="rootInterface" value="BaseMapper" />
+		</javaClientGenerator>
+
+		<table schema="mysql" tableName="kbase_knowledge_tag"
 			enableCountByExample="false" enableUpdateByExample="false"
 			enableDeleteByExample="false" enableSelectByExample="false"
-			selectByExampleQueryId="false">
+			enableSelectByPrimaryKey="false" enableUpdateByPrimaryKey="false"
+			enableDeleteByPrimaryKey="false" selectByExampleQueryId="false">
 		</table>
 	</context>
 </generatorConfiguration>

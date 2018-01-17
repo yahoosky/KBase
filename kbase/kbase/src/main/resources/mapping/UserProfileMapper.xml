@@ -35,4 +35,11 @@
 		user_profile where USER_NAME =
 		#{userName,jdbcType=VARCHAR}
 	</select>
+
+	<select id="getByPk" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_profile
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
 </mapper>

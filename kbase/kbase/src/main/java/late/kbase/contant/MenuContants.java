@@ -18,10 +18,6 @@ public interface MenuContants extends KBaseErrCodeConstants {
 	 */
 	public static final String MAIN_MENU_ROOT_PARENT_ID = "0";
 
-	/*********
-	 * 异常常量 *
-	 *********/
-
 	/**
 	 * 父菜单不存在
 	 */

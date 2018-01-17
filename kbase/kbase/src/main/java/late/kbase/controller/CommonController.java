@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import late.comm.UserProfile;
+import late.kbase.dto.KnowledgeBaseAddRequestDTO;
+import late.kbase.dto.KnowledgeBaseAddResponseDTO;
 import late.kbase.dto.MainMenuAddRequestDTO;
 import late.kbase.dto.MainMenuAddResponseDTO;
 import late.kbase.dto.MainMenuQueryRequestDTO;
@@ -43,6 +48,35 @@ public class CommonController {
 	IUserService userService = null;
 	@Resource
 	IMenuService menuService = null;
+
+	/**
+	 * 用户登录，为了切面区分获取用户，将方法独立
+	 * 
+	 * @see late.kbase.aop.UserAop.getUserById() 方式
+	 * @methodName login
+	 * @author chijingjia
+	 * @createTime 2018年1月15日 上午10:58:12
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@ResponseBody
+	public UserLoginResponseDTO login(@RequestBody UserLoginRequestDTO request) {
+		UserLoginResponseDTO resopnse = getUser(request);
+		UserProfile contextUser = new UserProfile();
+
+		String sessionId = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest()
+				.getSession().getId();
+
+		contextUser.setTicket(sessionId);
+		contextUser.setUserId(resopnse.getUser().getUserId());
+		contextUser.setUserName(resopnse.getUser().getUserName());
+		contextUser.setLvl(resopnse.getUser().getLvl());
+		resopnse.setContextUser(contextUser);
+
+		return resopnse;
+	}
 
 	/**
 	 * 获取用户信息
@@ -116,6 +150,25 @@ public class CommonController {
 		}
 
 		return response;
+	}
+
+	/**
+	 * 添加知识点
+	 * 
+	 * @methodName addKBase
+	 * @author chijingjia
+	 * @createTime 2018年1月15日 下午4:46:33
+	 * @version v1.0
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "addKBase", method = RequestMethod.POST)
+	@ResponseBody
+	public KnowledgeBaseAddResponseDTO addKBase(KnowledgeBaseAddRequestDTO request) {
+		KnowledgeBaseAddResponseDTO response = new KnowledgeBaseAddResponseDTO();
+
+		return response;
+
 	}
 
 }
