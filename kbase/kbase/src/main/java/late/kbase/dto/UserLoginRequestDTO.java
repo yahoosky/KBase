@@ -17,7 +17,7 @@ import late.kbase.entity.UserProfileEntity;
  * @createTime :2017年12月9日 下午2:11:53
  * @version: v1.0
  */
-@JsonIgnoreProperties({ "userEntity" })
+@JsonIgnoreProperties
 public class UserLoginRequestDTO extends BaseTradeRequestDTO {
 
 	/**

@@ -22,8 +22,10 @@ create table kbase_user_ticket(
 
 
 insert into kbase_err_def (err_code,err_msg,err_lvl) values ('DBER0001','未找到符合条件的记录','E');
+insert into kbase_err_def (err_code,err_msg,err_lvl) values ('DBER0002','记录已存在','E');
 insert into kbase_err_def (err_code,err_msg,err_lvl) values ('COMM0001','未找到指定用户','E');
 insert into kbase_err_def (err_code,err_msg,err_lvl) values ('COMM0002','用户总线为空','E');
+
 
 
 select * from kbase_menu_mast start with parent_id = '1' connect by prior parent_id = menu_id;
@@ -53,3 +55,24 @@ END;
 --查询菜单树的语句     
 select * from kbase_menu_mast
 where FIND_IN_SET(menu_id,concat(getMenuTree(0,3)));
+
+
+create table kbase_knowledge_mast(
+  k_id	varchar(10) NOT NULL PRIMARY KEY comment '主键',
+  k_title	varchar(256) comment '标题',
+  make_user	BIGINT(10) comment '创建用户',
+  make_date	TIMESTAMP(6) comment '创建用户',
+  last_mnt_user	BIGINT(10) comment '最后维护用户',
+  last_mnt_date	TIMESTAMP(6) comment '最后维护日期',
+  flg_mnt_status	char(1) comment '当前状态'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '知识库主表';
+
+create table kbase_knowledge_detl(
+  k_id	varchar(10) NOT NULL PRIMARY KEY comment '主键',
+  k_text	BLOB comment '错误信息'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '知识库明细表';
+
+create table kbase_knowledge_tag(
+  k_id	varchar(10) comment '主键',
+  k_tag	varchar(60) comment '错误信息'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '知识点标签';
