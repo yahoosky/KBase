@@ -1,2 +1,20 @@
-<!DOCTYPE rootElement PUBLIC "PublicIdentifier" "URIreference">
-<rootElement></rootElement>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="DEBUGF" class="org.apache.log4j.RollingFileAppender">
+		<param name="Encoding" value="UTF-8" />
+		<param name="File" value="STOCK_DEBUG.log"/>
+		<param name="MaxFileSize" value="10Mb"/>
+		<param name="MaxBackupIndex" value="20"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss,SSS}][%p] - %m%n"/>
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="debug"/>
+			<param name="LevelMax" value="debug"/>
+			<param name="AcceptOnMatch" value="true"/>
+		</filter>
+	</appender>
+
+</log4j:configuration>
